@@ -1,11 +1,25 @@
 version: '3.3'
 
 services:
-  pycram:
+  pycram_demo1:
     build:
       context: ./docker/context
       dockerfile: Dockerfile
       args:
         ROS_DISTRO: "melodic"
     tty: true
-    command: ["bash", "-c", "source /root/ros_ws/devel/setup.bash && cd /root/ros_ws/src/pycram/pycram/src/ && python3 /root/ros_ws/src/pycram/demos/pycram_pr2_demo/src/run.py"]
+    network_mode: "host"
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:ro
+      - ${XDG_RUNTIME_DIR}/pulse:${XDG_RUNTIME_DIR}/pulse:ro
+      - /var/lib/dbus:/var/lib/dbus:ro
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      QT_X11_NO_MITSHM: 1
+      DISPLAY: ${DISPLAY}
+      PULSE_SERVER: "unix:${XDG_RUNTIME_DIR}/pulse/native"
+    devices:
+      - /dev/dri
+      - /dev/snd
+    working_dir: "/root/pycram/demos/pycram_pr2_bullet_world_demo"
+    command: ["python3", "run.py"]
