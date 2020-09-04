@@ -1,0 +1,11 @@
+version: '3.3'
+
+services:
+  pycram:
+    build:
+      context: ./docker/context
+      dockerfile: Dockerfile
+      args:
+        ROS_DISTRO: "melodic"
+    tty: true
+    command: ["bash", "-c", "source /root/ros_ws/devel/setup.bash && cd /root/ros_ws/src/pycram/pycram/src/ && python3 /root/ros_ws/src/pycram/demos/pycram_pr2_demo/src/run.py"]
